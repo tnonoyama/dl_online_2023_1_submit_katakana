@@ -6,6 +6,19 @@ from common.util import im2col, col2im
 from common.loss import cross_entropy_error
 
 
+class Flatten:
+    def __init__(self):
+        self.original_x_input_size = None
+
+    def forward(self, x): 
+        print(f'x shape is: {x.shape}')
+        self.original_x_input_size = x.shape[0]
+
+        return x.reshape((self.original_x_input_size, -1))
+
+    def backward(self, dout):        
+        return dout.reshape(self.original_x_input_size)
+
 class ReLU:
     def __init__(self):
         self.mask = None
