@@ -5,7 +5,6 @@ from common.activations import *
 from common.util import im2col, col2im
 from common.loss import cross_entropy_error
 
-
 class Flatten:
     def __init__(self):
         self.original_x_input_size = None
