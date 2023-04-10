@@ -38,7 +38,10 @@ def accuracy(func_predict, test_data):
 
 #     test_label = np.load("../1_data/test_label.npy")
     test_label = np.load("../1_data/train_label.npy")
-    
+#     test_label_oh = np.load("../1_data/train_label.npy")
+#     #ワンホットベクトルをIDに変換
+#     vec_trans_id = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
+#     test_label = np.dot(test_label_oh, vec_trans_id.T)
     
     # 予測
     # サーバーへの負荷を軽減するため、ミニバッチ処理で行う
@@ -57,16 +60,17 @@ def accuracy(func_predict, test_data):
         mask = index[batch_size*mn:batch_size*(mn+1)]        
         data = test_data[mask]
         label = test_label[mask]
-        loss, accuracy  = func_predict(data, label)
-        print(loss, accuracy)
+#         loss, accuracy  = func_predict(data, label)
+        accuracy  = func_predict(data, label)
+        print(accuracy)
         
-        li_loss.append(loss)
+#         li_loss.append(loss)
         li_accuracy.append(accuracy)
         li_num.append(len(data))
 
-    test_loss = np.dot(li_loss, li_num) / np.sum(li_num)
+#     test_loss = np.dot(li_loss, li_num) / np.sum(li_num)
     test_accuracy = np.dot(li_accuracy, li_num) / np.sum(li_num)
     
-    print('Test loss:', test_loss)
+#     print('Test loss:', test_loss)
     print('Test accuracy:', test_accuracy)
     return

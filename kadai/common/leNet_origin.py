@@ -98,7 +98,7 @@ class LeNet5:
         self.layers['Pool2'] = MaxPooling(pool_h=pool2_size, pool_w=pool2_size, stride=pool2_stride, pad=pool2_pad)                            
         
         # TODO Flattenを定義する                            
-        self.layers['Flatten'] = Flatten() 
+#         self.layers['Flatten'] = Flatten() 
         
         self.layers['Affine1'] = Affine(self.params['W3'], self.params['b3'])
         self.layers['ReLU3'] = ReLU()
@@ -136,10 +136,8 @@ class LeNet5:
         for i in range(int(x.shape[0] / batch_size)):
             tx = x[i*batch_size:(i+1)*batch_size]
             tt = t[i*batch_size:(i+1)*batch_size]
-            print(f'tt is: {tt}')
             y = self.predict(tx)
             y = np.argmax(y, axis=1)
-            print(f'y  is: {y}')
             acc += np.sum(y == tt) 
         
         return acc / x.shape[0]

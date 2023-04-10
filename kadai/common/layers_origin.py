@@ -7,20 +7,16 @@ from common.loss import cross_entropy_error
 
 class Flatten:
     def __init__(self):
-        self.x = None
-        self.original_x_shape = None
+        self.original_x_input_size = None
 
     def forward(self, x): 
-        # テンソル対応(画像形式のxに対応させる)
-        self.original_x_shape = x.shape
-        x = x.reshape(x.shape[0], -1)
-        self.x = x
+        print(f'x shape is: {x.shape}')
+        self.original_x_input_size = x.shape[0]
 
-        return x
+        return x.reshape((self.original_x_input_size, -1))
 
-    def backward(self, dout): 
-        dout = dout.reshape(*self.original_x_shape)  # 入力データの形状に戻す（テンソル対応）
-        return dout
+    def backward(self, dout):        
+        return dout.reshape(self.original_x_input_size)
 
 class ReLU:
     def __init__(self):
@@ -84,10 +80,13 @@ class Affine:
         self.db = None
 
     def forward(self, x):
+        # テンソル対応(画像形式のxに対応させる)
+        self.original_x_shape = x.shape
+        x = x.reshape(x.shape[0], -1)
         self.x = x
 
         out = np.dot(self.x, self.W) + self.b
-        
+
         return out
 
     def backward(self, dout):
@@ -95,6 +94,7 @@ class Affine:
         self.dW = np.dot(self.x.T, dout)
         self.db = np.sum(dout, axis=0)
         
+        dx = dx.reshape(*self.original_x_shape)  # 入力データの形状に戻す（テンソル対応）
         return dx
 
 
